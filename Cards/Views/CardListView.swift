@@ -10,7 +10,7 @@ import SwiftUI
 struct CardListView: View {
     @State private var isPresented = false
     
-    var body: some View {
+    var list: some View {
         ScrollView(showsIndicators: false) {
             VStack {
                 ForEach(1..<10) { _ in
@@ -18,6 +18,10 @@ struct CardListView: View {
                 }
             }
         }
+    }
+    
+    var body: some View {
+        list
         .fullScreenCover(isPresented: $isPresented) {
             SingleCardView()
         }
