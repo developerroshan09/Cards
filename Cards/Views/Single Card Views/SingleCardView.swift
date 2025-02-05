@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct SingleCardView: View {
-    @Environment(\.dismiss) var dismiss
     @State private var currentModal: ToolbarSelection?
+    
+    let card: Card
     
     var content: some View {
         ZStack {
             Group {
                 Capsule()
                     .foregroundColor(.yellow)
-                    
+                
                 
                 Text("Resize Me!")
                     .font(.system(size: 500))
@@ -34,12 +35,12 @@ struct SingleCardView: View {
     
     var body: some View {
         NavigationStack {
-            content
+            card.backgroundColor
                 .cardToolbar(modal: $currentModal)
         }
     }
 }
 
 #Preview {
-    SingleCardView()
+    SingleCardView(card: initialCards[0])
 }

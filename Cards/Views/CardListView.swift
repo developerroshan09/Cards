@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct CardListView: View {
-    @State private var isPresented = false
+    @State private var selectedCard: Card?
+    
     @EnvironmentObject var store: CardStore
     
     var list: some View {
@@ -16,6 +17,9 @@ struct CardListView: View {
             VStack {
                 ForEach(store.cards) { card in
                     CardThumbnail(card: card)
+                        .onTapGesture {
+                            selectedCard = card
+                        }
                 }
             }
         }
@@ -23,12 +27,9 @@ struct CardListView: View {
     
     var body: some View {
         list
-        .fullScreenCover(isPresented: $isPresented) {
-            SingleCardView()
-        }
-        .onTapGesture {
-            isPresented = true
-        }
+            .fullScreenCover(item: $selectedCard) { card in
+                SingleCardView(card: card)
+            }
     }
 }
 
