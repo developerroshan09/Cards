@@ -12,6 +12,7 @@ struct ResizableView: View {
     @State private var transform = Transform()
     @State private var previousRotation: Angle = .zero
     @State private var previousOffset: CGSize = .zero
+    @State private var scale: CGFloat = 1.0
     
     private let content = RoundedRectangle(cornerRadius: 20)
     private let color = Color.red
@@ -37,6 +38,18 @@ struct ResizableView: View {
             }
     }
     
+    var scaleGesture: some Gesture {
+        MagnificationGesture()
+            .onChanged { scale in
+                self.scale = scale
+            }
+            .onEnded { scale in
+                transform.size.width *= scale
+                transform.size.height *= scale
+                self.scale = 1.0
+            }
+    }
+    
     var body: some View {
         content
             .frame(width: transform.size.width, height: transform.size.height)
@@ -44,7 +57,8 @@ struct ResizableView: View {
             .rotationEffect(transform.rotation)
             .offset(transform.offset)
             .gesture(dragGesture)
-            .gesture(rotationGesture)
+            .gesture(SimultaneousGesture(rotationGesture, scaleGesture))
+            .scaleEffect(scale)
     }
 }
 
