@@ -14,8 +14,8 @@ struct CardListView: View {
     var list: some View {
         ScrollView(showsIndicators: false) {
             VStack {
-                ForEach(1..<10) { _ in
-                    CardThumbnail()
+                ForEach(store.cards) { card in
+                    CardThumbnail(card: card)
                 }
             }
         }
