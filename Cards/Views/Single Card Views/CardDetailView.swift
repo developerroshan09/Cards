@@ -15,15 +15,24 @@ struct CardDetailView: View {
         ZStack {
             ForEach($card.elements, id: \.id) { $element in
                 CardElementView(element: element)
-                    .resizableView()
+                    .resizableView(transform: $element.transform)
                     .frame(width: element.transform.size.width,
-                            height: element.transform.size.height
+                           height: element.transform.size.height
                     )
             }
         }
     }
 }
 
-#Preview {
-    CardDetailView(card: .constant(initialCards[0]))
+struct CardDetailView_Previews: PreviewProvider {
+    struct CardDetailPreview: View {
+        @EnvironmentObject var store: CardStore
+        var body: some View {
+            CardDetailView(card: $store.cards[0])
+        }
+    }
+    static var previews: some View {
+        CardDetailPreview()
+            .environmentObject(CardStore(defaultData: true))
+    }
 }
