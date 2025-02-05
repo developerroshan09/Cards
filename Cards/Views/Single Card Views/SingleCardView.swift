@@ -10,7 +10,7 @@ import SwiftUI
 struct SingleCardView: View {
     @State private var currentModal: ToolbarSelection?
     
-    let card: Card
+    @Binding var card: Card
     
     var content: some View {
         ZStack {
@@ -34,13 +34,15 @@ struct SingleCardView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack {ZStack {
             card.backgroundColor
+            CardDetailView(card: $card)
                 .cardToolbar(modal: $currentModal)
+        }
         }
     }
 }
 
 #Preview {
-    SingleCardView(card: initialCards[0])
+    SingleCardView(card: .constant(initialCards[0]))
 }
