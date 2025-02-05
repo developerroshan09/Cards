@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CardListView: View {
     @State private var isPresented = false
+    @EnvironmentObject var store: CardStore
     
     var list: some View {
         ScrollView(showsIndicators: false) {
@@ -33,5 +34,6 @@ struct CardListView: View {
 
 #Preview {
     CardListView()
+        .environmentObject(CardStore(defaultData: true))
 }
 
