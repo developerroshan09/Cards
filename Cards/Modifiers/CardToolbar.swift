@@ -23,7 +23,7 @@ struct CardToolbar: ViewModifier {
           }
         }
         ToolbarItem(placement: .bottomBar) {
-          BottomToolbar(modal: $currentModal)
+            BottomToolbar(modal: $currentModal, card: $card)
         }
       }
       .sheet(item: $currentModal) { item in
@@ -36,6 +36,8 @@ struct CardToolbar: ViewModifier {
               }
               stickerImage = nil
             }
+        case .photoModal:
+            PhotosModal(card: $card)
         default:
           Text(String(describing: item))
         }

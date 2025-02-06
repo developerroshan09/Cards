@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ToolbarButton: View {
     let modal : ToolbarSelection
-
+    
     private let modalButton: [ToolbarSelection: (text: String, imageName: String)] = [
         .photoModal: ("Photos", "photo"),
         .frameModal: ("Frame", "square.on.circle"),
@@ -33,14 +33,24 @@ struct ToolbarButton: View {
 struct BottomToolbar: View {
     
     @Binding var modal: ToolbarSelection?
+    @Binding var card: Card
     
     var body: some View {
         HStack {
             ForEach(ToolbarSelection.allCases) { selection in
-                Button {
-                    modal = selection
-                } label: {
-                    ToolbarButton(modal: selection)
+                switch selection {
+                case .photoModal:
+                    Button {
+                        
+                    } label: {
+                        PhotosModal(card: $card)
+                    }
+                default:
+                    Button {
+                        modal = selection
+                    } label: {
+                        ToolbarButton(modal: selection)
+                    }
                 }
             }
         }
@@ -48,5 +58,5 @@ struct BottomToolbar: View {
 }
 
 #Preview {
-    BottomToolbar(modal: .constant(.stickerModal))
+    BottomToolbar(modal: .constant(.stickerModal), card: .constant(Card()))
 }
