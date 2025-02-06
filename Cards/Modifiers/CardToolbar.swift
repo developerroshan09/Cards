@@ -9,38 +9,36 @@ import Foundation
 import SwiftUI
 
 struct CardToolbar: ViewModifier {
-    
-    @Environment(\.dismiss) var dismiss
-    @Binding var currentModal: ToolbarSelection?
-    
-    func body(content: Content) -> some View {
-        content
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text("Done")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                    }
-                }
-                
-                ToolbarItem(placement: .bottomBar) {
-                    BottomToolbar(modal: $currentModal)
-                }
-            }
-            .sheet(item: $currentModal) { item in
-                switch item {
-                default:
-                    Text(String(describing: item))
-                }
-            }
-    }
-}
+  @Environment(\.dismiss) var dismiss
+  @Binding var currentModal: ToolbarSelection?
+  @Binding var card: Card
+  @State private var stickerImage: UIImage?
 
-extension View {
-    func cardToolbar(modal: Binding<ToolbarSelection?>) -> some View {
-        modifier(CardToolbar(currentModal: modal))
-    }
+  func body(content: Content) -> some View {
+    content
+      .toolbar {
+        ToolbarItem(placement: .navigationBarTrailing) {
+          Button("Done") {
+            dismiss()
+          }
+        }
+        ToolbarItem(placement: .bottomBar) {
+          BottomToolbar(modal: $currentModal)
+        }
+      }
+      .sheet(item: $currentModal) { item in
+        switch item {
+        case .stickerModal:
+          StickerModal(stickerImage: $stickerImage)
+            .onDisappear {
+              if let stickerImage = stickerImage {
+                card.addElement(uiImage: stickerImage)
+              }
+              stickerImage = nil
+            }
+        default:
+          Text(String(describing: item))
+        }
+      }
+  }
 }

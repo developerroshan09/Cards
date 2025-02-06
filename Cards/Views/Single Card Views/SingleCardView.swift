@@ -8,20 +8,28 @@
 import SwiftUI
 
 struct SingleCardView: View {
-    @State private var currentModal: ToolbarSelection?
-    @Binding var card: Card
+  @Binding var card: Card
+  @State private var currentModal: ToolbarSelection?
 
-    
-    var body: some View {
-        NavigationStack {ZStack {
-            card.backgroundColor
-            CardDetailView(card: $card)
-                .cardToolbar(modal: $currentModal)
-        }
-        }
+  var body: some View {
+    NavigationStack {
+      CardDetailView(card: $card)
+        .modifier(CardToolbar(
+          currentModal: $currentModal,
+          card: $card))
     }
+  }
 }
 
-#Preview {
-    SingleCardView(card: .constant(initialCards[0]))
+struct SingleCardView_Previews: PreviewProvider {
+  struct SingleCardPreview: View {
+    @EnvironmentObject var store: CardStore
+    var body: some View {
+      SingleCardView(card: $store.cards[0])
+    }
+  }
+  static var previews: some View {
+    SingleCardPreview()
+      .environmentObject(CardStore(defaultData: true))
+  }
 }
